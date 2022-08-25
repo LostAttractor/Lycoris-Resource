@@ -15,7 +15,7 @@ fun main(args: Array<String>) {
     val file = runPath.toFile() //获取其file对象
     val fs = file.listFiles() //遍历path下的文件和目录，放在File数组中
     for (f in fs!!) {                    //遍历File[]数组
-        if (!f.isDirectory && f.name.endsWith(".srg")) {
+        if (!f.isDirectory && (f.name.endsWith(".srg") || f.name.endsWith(".dll"))) {
             println("Found a SRGMap File: $f")
             val srgMap = readFile(f)
             val hashMode = HashMode.MD5
