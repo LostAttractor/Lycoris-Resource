@@ -15,7 +15,7 @@ fun main(args: Array<String>) {
                     val stream = f.inputStream()
                     val buffer = ByteArray(stream.available())
                     stream.read(buffer)
-                    String(buffer).split(System.lineSeparator())[1].forEach { println("it: $it code: ${it.code}") }
+                    String(buffer).split(10.toChar())[0].forEach { println("it: $it code: ${it.code}") }
                     return
 //                    val reader = BufferedReader(InputStreamReader(stream))
 //                    val lines = reader.lines().collect(Collectors.joining(System.lineSeparator()))
