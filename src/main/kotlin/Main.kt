@@ -15,14 +15,18 @@ fun main(args: Array<String>) {
     val file = runPath.toFile() //获取其file对象
     val fs = file.listFiles() //遍历path下的文件和目录，放在File数组中
     for (f in fs!!) {                    //遍历File[]数组
-        if (!f.isDirectory && (f.name.endsWith(".srg")) || f.name.endsWith(".dll")) {
-            println("Found a SRGMap File: $f")
-            val srgMap = readFile(f)
-            val hashMode = HashMode.MD5
-            val hash = getHashCode(srgMap, hashMode)
-            if (hash != null) {
-                println("${hashMode.modeName}: $hash")
-                writeFile(file.resolve("${f.name}.${hashMode.name.lowercase()}"), hash)
+        if (!f.isDirectory) {
+            for (arg in args) {
+                if (f.name.endsWith(".$arg")) {
+                    println("Found a File: ${f.name}")
+                    val context = readFile(f)
+                    val hashMode = HashMode.MD5
+                    val hash = getHashCode(context, hashMode)
+                    if (hash != null) {
+                        println("${hashMode.modeName}: $hash")
+                        writeFile(file.resolve("${f.name}.${hashMode.name.lowercase()}"), hash)
+                    }
+                }
             }
 //            val hashOnline = getHashCode(getFileString("https://srgmaps.vercel.app/${f.name}"), hashMode)
 //            println(hashOnline)
