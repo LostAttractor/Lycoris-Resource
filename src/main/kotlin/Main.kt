@@ -34,21 +34,6 @@ fun main(args: Array<String>) {
             }
         }
     }
-//    val hashAlgorithm = HashAlgorithm.MD5
-//    val stream = BufferedInputStream(URL("https://github.com/LostAttractor/SRGMaps/blob/main/VANILLA189.srg?raw=true").openStream())
-//   // val connection = createConnection("https://github.com/LostAttractor/SRGMaps/blob/main/VANILLA189.srg?raw=true")
-//    //val stream = connection.inputStream
-//    val bufferStream = ByteArrayOutputStream()
-//    val buffer = ByteArray(1024)
-//    var count: Int
-//    while (stream.read(buffer, 0, 1024).also { count = it } != -1) {
-//        bufferStream.write(buffer, 0, count)
-//    }
-//    stream.close();
-//    println(bufferStream.toByteArray().size)
-//    val hash = getHashCode(buffer, hashAlgorithm)
-//    println("${hashAlgorithm.modeName}: $hash")
-    downloadUsingNIO("https://github.com/LostAttractor/SRGMaps/blob/main/VANILLA189.srg?raw=true", "VANILLA189.srg.test")
 }
 
 @Throws(IOException::class)
