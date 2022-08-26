@@ -19,13 +19,14 @@ fun main(args: Array<String>) {
             for (arg in args) {
                 if (f.name.endsWith(".$arg")) {
                     println("Found a File: ${f.name}")
-                    val context = readFile(f)
-                    val hashMode = HashMode.MD5
-                    val hash = getHashCode(context, hashMode)
-                    if (hash != null) {
-                        println("${hashMode.modeName}: $hash")
-                        writeFile(file.resolve("${f.name}.${hashMode.name.lowercase()}"), hash)
-                    }
+                    val fis = FileInputStream(f)
+                    val hashAlgorithm = HashAlgorithm.MD5
+                    val buffer = ByteArray(fis.available())
+                    fis.read(buffer)
+                    fis.close()
+                    val hash = getHashCode(buffer, hashAlgorithm)
+                    println("${hashAlgorithm.modeName}: $hash")
+                    writeFileString(file.resolve("${f.name}.${hashAlgorithm.name.lowercase()}"), hash)
                 }
             }
 //            val hashOnline = getHashCode(getFileString("https://srgmaps.vercel.app/${f.name}"), hashMode)
@@ -51,31 +52,17 @@ private fun createConnection(url: String): HttpURLConnection {
     return connection
 }
 
-fun getHashCode(input: String, mode: HashMode): String? {
-    var output: String? = null
-    try {
-        val digest = MessageDigest.getInstance(mode.modeName)
-        digest.reset()
-        digest.update(input.toByteArray(charset("utf8")))
-        output = BigInteger(1, digest.digest()).toString(digest.digestLength)
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-    return output
+fun getHashCode(input: ByteArray, mode: HashAlgorithm): String {
+    val digest = MessageDigest.getInstance(mode.modeName)
+    digest.update(input)
+    return BigInteger(1, digest.digest()).toString(digest.digestLength)
 }
 
-enum class HashMode(val modeName: String) {
+enum class HashAlgorithm(val modeName: String) {
     MD5("MD5"), SHA1("SHA-1"), SHA256("SHA-256"), SHA512("SHA-512")
 }
 
-@Throws(IOException::class)
-fun readFile(file: File): String {
-    val stream = file.inputStream()
-    val reader = BufferedReader(InputStreamReader(stream))
-    return reader.lines().collect(Collectors.joining(System.lineSeparator()))
-}
-
-fun writeFile(file: File, string: String) {
+fun writeFileString(file: File, string: String) {
     val writer: FileWriter
     try {
         writer = FileWriter(file)
